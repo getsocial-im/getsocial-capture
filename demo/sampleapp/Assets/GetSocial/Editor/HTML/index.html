@@ -1,0 +1,63 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="style_pro.css">
+</head>
+<body>
+<header>
+    <h1>Thanks for installing GetSocial Unity SDK</h1>
+</header>
+
+<section>
+    <h2>To start with GetSocial:</h2>
+    <ol>
+        <li>Create your account at <a href="https://dashboard.getsocial.im/" target="_blank">dashboard.getsocial.im</a></li>
+        <li>Copy GetSocial app ID from the Dashboard into <a href="#" onclick="sendMessage ('OpenGetSocialSettings')">GetSocial Unity settings</a></li>
+        <li>Visit <a href="https://docs.getsocial.im/" target="_blank">documentation</a> to learn how to integrate GetSocial features</li>
+    </ol>
+</section>
+
+<footer>
+    <a href="https://www.getsocial.im/products/" target="_blank">Product overview</a>
+    <a href="https://docs.getsocial.im/" target="_blank">Docs</a>
+    <a href="mailto:support@getsocial.im" target="_blank">Support</a>
+</footer>
+
+<script type="text/javascript">
+
+    function sendMessage(method) {
+        unityAsync({
+            className: "window.webScriptObject",
+            funcName: "ProcessMessage",
+            funcArgs: [JSON.stringify({
+                method: method,
+                params: []
+            })],
+            onSuccess: function (result) {
+            }
+        });
+    }
+
+    function initPage(isProSkin, utmSource) {
+        if (typeof String.prototype.startsWith === 'undefined') {
+            String.prototype.startsWith = function(prefix) {
+                return this.lastIndexOf(prefix, 0) === 0;
+            };
+        }
+        if (isProSkin === "True") {
+            document.body.classList.add("proSkin");
+        }
+        
+        document.addEventListener('click', function (e) {
+            var a = e.target;
+            if (a.tagName === 'A' && a.href && a.href.startsWith('http')) {
+                e.preventDefault();
+                window.open(a.href + '?utm_source=' + utmSource + '&utm_medium=unity-editor-onboarding-page', a.target);
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+body {
+    background-color: #C2C2C2;
+    color: #282828;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-size: 12px;
+    padding: 20px 20px;
+}
+
+header {
+    background: url('logo.png') no-repeat;
+    background-size: auto 50px;
+    padding-top: 50px;
+}
+
+section > ol {
+    padding-left: 20px;
+    margin-bottom: 20px;
+}
+
+section > ol > li {
+    position: relative;
+    padding-left: 10px;
+}
+
+section > ol > li:before {
+    position: absolute;
+    left: -22px;
+    top: -3px;
+    content: '';
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(93, 84, 84, 0.3);
+    z-index: -1;
+}
+
+section > ol > li:not(:last-child) {
+    margin-bottom: 20px;
+}
+
+footer {
+    border-top: 1px solid lightgray;
+    padding-top: 10px;
+}
+
+footer > a:not(:last-child) {
+    margin-right: 20px;
+}
+
+a {
+    color: #1562e4;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.proSkin {
+    background-color: #383838 !important;
+    color: #DBDBDC !important;
+}
+
+.proSkin header {
+    background-image: url('logo_pro.png') !important;
+}
+
+.proSkin a {
+    color: #578de8 !important;
+}

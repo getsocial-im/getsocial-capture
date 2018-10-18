@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="6.0.0" package="com.xxx" android:installLocation="preferExternal">
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <supports-screens android:anyDensity="true" android:largeScreens="true" android:normalScreens="true" android:smallScreens="true" android:xlargeScreens="true" />
+    <uses-sdk android:minSdkVersion="15" />
+    <application android:icon="@drawable/app_icon" android:label="@string/app_name" android:theme="@style/UnityThemeSelector" android:debuggable="false" android:isGame="true" android:banner="@drawable/app_banner">
+        <receiver android:name="im.getsocial.sdk.invites.MultipleInstallReferrerReceiver">
+            <intent-filter android:autoVerify="false">
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
+        </receiver>
+        <activity android:name="im.getsocial.sdk.internal.unity.GetSocialDeepLinkingActivity">
+            <intent-filter android:autoVerify="true">
+                <data android:scheme="https" android:host="getsocialinternalsdk6-gsalt.gsc.im" />
+                <data android:scheme="https" android:host="getsocialinternalsdk6.gsc.im" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+            <intent-filter android:autoVerify="false">
+                <data android:scheme="getsocial" android:host="LK8A9cA0o07" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+            </intent-filter>
+        </activity>
+        <provider android:name="im.getsocial.sdk.invites.ImageContentProvider" android:authorities="im.getsocial.capture.sampleapp.smartinvite.images.provider" android:exported="true" android:enabled="true" />
+        <provider android:name="im.getsocial.sdk.AutoInitSdkContentProvider" android:authorities="im.getsocial.capture.sampleapp.AutoInitSdkContentProvider" android:exported="false" android:enabled="true" />
+        <meta-data android:name="im.getsocial.sdk.UiConfigurationFile" android:value="" />
+        <meta-data android:name="im.getsocial.sdk.AutoInitSdk" android:value="true" />
+        <meta-data android:name="im.getsocial.sdk.ShowNotificationInForeground" android:value="false" />
+        <meta-data android:name="im.getsocial.sdk.AutoRegisterForPush" android:value="true" />
+        <meta-data android:name="im.getsocial.sdk.WrapperVersion" android:value="6.20.6" />
+        <meta-data android:name="im.getsocial.sdk.RuntimeVersion" android:value="2018.2.8f1" />
+        <meta-data android:name="im.getsocial.sdk.Runtime" android:value="UNITY" />
+        <meta-data android:name="im.getsocial.sdk.AppId" android:value="LK8A9cA0o07" />
+        <activity android:label="@string/app_name" android:name="com.unity3d.player.UnityPlayerActivity" android:screenOrientation="fullSensor" android:launchMode="singleTask" android:configChanges="mcc|mnc|locale|touchscreen|keyboard|keyboardHidden|navigation|orientation|screenLayout|uiMode|screenSize|smallestScreenSize|fontScale">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+            <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
+        </activity>
+    </application>
+    <uses-feature android:glEsVersion="0x00020000" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
+    <uses-feature android:name="android.hardware.touchscreen.multitouch" android:required="false" />
+    <uses-feature android:name="android.hardware.touchscreen.multitouch.distinct" android:required="false" />
+</manifest>
