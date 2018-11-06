@@ -111,6 +111,35 @@ You configure the recording using the following parameters:
 - `playbackFrameRate` - Number of displayed frames per second.
 - `loopPlayback` - Generated gif loops or played only once.
 
+**Hint**
+
+The length of recorded gif can be calculated using the following formula:
+
+```
+length = (maxCapturedFrames / captureFrameRate)  * (captureFrameRate  / playbackFrameRate)
+```
+
+#### Example - Quick
+
+```
+maxCapturedFrames = 50
+captureFrameRate = 10
+playback = 30
+```
+
+![Quick](example-quick.gif)
+
+
+#### Example - Slow
+
+```
+maxCapturedFrames = 50
+captureFrameRate = 30
+playback = 10
+```
+
+![Slow](example-slow.gif)
+
 ## Preview
 
 If you want to display the recorded content in your game, add `GetSocialCapturePreview` Prefab to any of your screens.
