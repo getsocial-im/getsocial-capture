@@ -103,6 +103,7 @@ void LevelFinished()
 ### Customization
 
 You configure the recording using the following parameters:
+
 ![Parameters](capture_parameters.png)
 
 - `captureFrameRate` - Number of captured frames per second.
@@ -125,6 +126,7 @@ length = (maxCapturedFrames / captureFrameRate)  * (captureFrameRate  / playback
 maxCapturedFrames = 50
 captureFrameRate = 10
 playback = 30
+length = 1.5 sec
 ```
 
 ![Quick](example-quick.gif)
@@ -136,6 +138,7 @@ playback = 30
 maxCapturedFrames = 50
 captureFrameRate = 30
 playback = 10
+length = 5 sec
 ```
 
 ![Slow](example-slow.gif)
@@ -167,12 +170,14 @@ void ActionFinished()
 ### Customization
 
 You can also customize playback:
+
 ![Parameters](preview_parameters.png)
 
 - `playbackFrameRate` - Number of displayed frames per second.
 - `loopPlayback` - Preview loops or played only once.
 
 The size and position of preview window can be changed in the Editor:
+
 ![Preview](preview_size.png)
 
 
