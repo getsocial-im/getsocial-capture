@@ -1,6 +1,6 @@
 # Introduction
 
-The project goal is to provide developers a generic and simple tool to record gameplay of their game.
+The project goal is to let Unity developers record GIFs of gameplay of their game for easy sharing between friends.
 After adding asset to your project, you'll have access to all the source codes, feel free to improve it.
 If you wonder how to use recorded content, check out our SDK at [https://getsocial.im](https://getsocial.im).
 
