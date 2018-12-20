@@ -3,6 +3,7 @@ using System.Collections;
 using System.IO;
 using GetSocialSdk.Capture.Scripts.Internal.Gif;
 using GetSocialSdk.Capture.Scripts.Internal.Recorder;
+using GetSocialSdk.Scripts.Internal.Util;
 using UnityEngine;
 
 using ThreadPriority = System.Threading.ThreadPriority;
@@ -124,7 +125,10 @@ namespace GetSocialSdk.Capture.Scripts
                     {
                         Debug.Log("Result: " + _resultFilePath);
                         
-                        result(File.ReadAllBytes(_resultFilePath));
+                        MainThreadExecutor.Queue(() => {
+                            result(File.ReadAllBytes(_resultFilePath));
+                            
+                        });                        
                     });
                 generator.Start();
             }
