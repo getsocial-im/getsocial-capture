@@ -86,7 +86,7 @@ namespace GetSocialSdk.Capture.Scripts.Internal.Recorder
 
 				if (rt == null)
 				{
-					rt = new RenderTexture(_width, _height, 0, RenderTextureFormat.ARGB32);
+					rt = RenderTexture.GetTemporary(_width, _height, 0, RenderTextureFormat.ARGB32);
 					rt.wrapMode = TextureWrapMode.Clamp;
 					rt.filterMode = FilterMode.Bilinear;
 					rt.anisoLevel = 0;
@@ -115,6 +115,7 @@ namespace GetSocialSdk.Capture.Scripts.Internal.Recorder
 		{
 			StoreWorker.Instance.StoreFrame(renderTexture);
 			yield return null;
+			RenderTexture.ReleaseTemporary(renderTexture);
 		}
 
 		#endregion

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace GetSocialSdk.Scripts.Internal.Util
 {
@@ -38,7 +39,8 @@ namespace GetSocialSdk.Scripts.Internal.Util
 
             while (_queue.Count > _size)
             {
-                _queue.Dequeue();
+                var o = _queue.Dequeue();
+                if (o is Object) Object.Destroy(o as Object);
             }
         }
 
