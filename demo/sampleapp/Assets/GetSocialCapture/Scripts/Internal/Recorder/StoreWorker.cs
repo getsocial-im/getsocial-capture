@@ -68,6 +68,8 @@ namespace GetSocialSdk.Capture.Scripts.Internal.Recorder
                 Height = tempTexture.height,
                 Data = tempTexture.GetPixels32()
             };
+
+            Object.Destroy(tempTexture);
             
             StoredFrames.Enqueue(frame);
         }
