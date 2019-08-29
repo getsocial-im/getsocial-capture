@@ -25,6 +25,9 @@
 
 using UnityEngine;
 using System.Collections;
+#if UNITY_2019_1_OR_NEWER
+using UnityEngine.Rendering;
+#endif
 
 namespace GetSocialSdk.Capture.Scripts.Internal.Recorder
 {
@@ -52,9 +55,9 @@ namespace GetSocialSdk.Capture.Scripts.Internal.Recorder
 		private RenderTexture _recycledRenderTexture;
 
 		private Camera _camera;
-		private int _width;
-		private int _height;
 
+		private static double RESIZE_RATIO = 0.5;
+		
 		#endregion
 
 		#region Unity methods
@@ -62,11 +65,44 @@ namespace GetSocialSdk.Capture.Scripts.Internal.Recorder
 		private void Awake()
 		{
 			_camera = GetComponent<Camera>();
-			_width = _camera.pixelWidth / 4;
-			_height = _camera.pixelHeight / 4;
 			CurrentState = RecordingState.OnHold;
+#if UNITY_2019_1_OR_NEWER
+			RenderPipelineManager.beginCameraRendering += OnEndCameraRendering;
+#endif			
 		}
 
+#if UNITY_2019_1_OR_NEWER
+		private void OnEndCameraRendering(ScriptableRenderContext context, Camera cameraEndRendering)
+		{
+			if (CurrentState != RecordingState.Recording &&
+			    CurrentState != RecordingState.RecordNow)
+			{
+				return;
+			}
+			_elapsedTime += Time.unscaledDeltaTime;
+
+			if (_elapsedTime >= 1.0f / CaptureFrameRate)
+			{
+				var targetRenderTexture = GetTemporaryRenderTexture();
+
+				var commandBuffer = new CommandBuffer();
+				commandBuffer.Blit(BuiltinRenderTextureType.CurrentActive, targetRenderTexture);
+				context.ExecuteCommandBuffer(commandBuffer);
+				context.Submit();
+				commandBuffer.Release();
+							
+				_elapsedTime = 0;
+					
+				StartCoroutine("StoreCaptureFrame", targetRenderTexture);
+
+				if (CurrentState == RecordingState.RecordNow)
+				{
+					CurrentState = RecordingState.OnHold;
+				}
+			}
+		}
+#endif
+		
 		private void OnRenderImage(RenderTexture source, RenderTexture destination)
 		{
 			if (CurrentState != RecordingState.Recording &&
@@ -80,23 +116,13 @@ namespace GetSocialSdk.Capture.Scripts.Internal.Recorder
 
 			if (_elapsedTime >= 1.0f / CaptureFrameRate)
 			{
-				// Frame data
-				var rt = _recycledRenderTexture;
-				_recycledRenderTexture = null;
-
-				if (rt == null)
-				{
-					rt = RenderTexture.GetTemporary(_width, _height, 0, RenderTextureFormat.ARGB32);
-					rt.wrapMode = TextureWrapMode.Clamp;
-					rt.filterMode = FilterMode.Bilinear;
-					rt.anisoLevel = 0;
-				}
-
-				Graphics.Blit(source, rt);
+				var targetRenderTexture = GetTemporaryRenderTexture();
+				
+				Graphics.Blit(source, targetRenderTexture);
 
 				_elapsedTime = 0;
 
-				StartCoroutine("StoreCaptureFrame", rt);
+				StartCoroutine("StoreCaptureFrame", targetRenderTexture);
 
 				if (CurrentState == RecordingState.RecordNow)
 				{
@@ -111,9 +137,24 @@ namespace GetSocialSdk.Capture.Scripts.Internal.Recorder
 
 		#region Private methods
 
+		private RenderTexture GetTemporaryRenderTexture()
+		{
+			var rt = _recycledRenderTexture;
+			_recycledRenderTexture = null;
+
+			if (rt != null) return rt;
+			
+			rt = RenderTexture.GetTemporary(_camera.pixelWidth, _camera.pixelHeight, 0, RenderTextureFormat.ARGB32);
+			rt.wrapMode = TextureWrapMode.Clamp;
+			rt.filterMode = FilterMode.Bilinear;
+			rt.anisoLevel = 0;
+
+			return rt;
+		}
+		
 		private IEnumerator StoreCaptureFrame(RenderTexture renderTexture)
 		{
-			StoreWorker.Instance.StoreFrame(renderTexture);
+			StoreWorker.Instance.StoreFrame(renderTexture, RESIZE_RATIO);
 			yield return null;
 			RenderTexture.ReleaseTemporary(renderTexture);
 		}

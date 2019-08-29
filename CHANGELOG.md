@@ -1,3 +1,9 @@
+## v0.9.2 - 29 Aug, 2019
+
+** New
+
+- GetSocialCapture now supports new scriptable rendering pipeline!
+
 ## v0.9.1 - 3 Jan, 2019
 
 ** New

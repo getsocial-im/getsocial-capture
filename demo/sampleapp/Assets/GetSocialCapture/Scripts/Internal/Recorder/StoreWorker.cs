@@ -1,7 +1,9 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using GetSocialSdk.Capture.Scripts.Internal.Gif;
 using GetSocialSdk.Scripts.Internal.Util;
 using UnityEngine;
+using Object = UnityEngine.Object;
 using ThreadPriority = System.Threading.ThreadPriority;
 
 namespace GetSocialSdk.Capture.Scripts.Internal.Recorder
@@ -46,11 +48,21 @@ namespace GetSocialSdk.Capture.Scripts.Internal.Recorder
             _thread.Start();
         }
 
-        internal void StoreFrame(RenderTexture renderTexture)
+        internal void StoreFrame(RenderTexture renderTexture, double resizeRatio)
         {
+            var newWidth = Convert.ToInt32(renderTexture.width * resizeRatio);
+            var newHeight = Convert.ToInt32(renderTexture.height * resizeRatio);
+            renderTexture.filterMode = FilterMode.Bilinear;
+            
+            var resizedRenderTexture = RenderTexture.GetTemporary(newWidth, newHeight);
+            resizedRenderTexture.filterMode = FilterMode.Bilinear;
+
+            RenderTexture.active = resizedRenderTexture;
+            Graphics.Blit(renderTexture, resizedRenderTexture);
+            
             // convert to Texture2D
-            var tempTexture =
-                new Texture2D(renderTexture.width, renderTexture.height, TextureFormat.RGBA32, false)
+            var resizedTexture2D =
+                new Texture2D(newWidth, newHeight, TextureFormat.RGBA32, false)
                 {
                     hideFlags = HideFlags.HideAndDontSave,
                     wrapMode = TextureWrapMode.Clamp,
@@ -58,18 +70,19 @@ namespace GetSocialSdk.Capture.Scripts.Internal.Recorder
                     anisoLevel = 0
                 };
 
-            RenderTexture.active = renderTexture;
-            tempTexture.ReadPixels(new Rect(0, 0, renderTexture.width, renderTexture.height), 0, 0);
+            resizedTexture2D.ReadPixels(new Rect(0, 0, newWidth, newHeight), 0, 0);
+            resizedTexture2D.Apply();            
             RenderTexture.active = null;
-            
+
             var frame = new GifFrame
             {
-                Width = tempTexture.width,
-                Height = tempTexture.height,
-                Data = tempTexture.GetPixels32()
+                Width = resizedTexture2D.width,
+                Height = resizedTexture2D.height,
+                Data = resizedTexture2D.GetPixels32()
             };
 
-            Object.Destroy(tempTexture);
+            resizedRenderTexture.Release();
+            Object.Destroy(resizedTexture2D);
             
             StoredFrames.Enqueue(frame);
         }
