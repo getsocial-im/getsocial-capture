@@ -1,3 +1,9 @@
+## v0.9.3 - 11 Mar, 2020
+
+** Improvements
+
+- Improved memory management.
+
 ## v0.9.2 - 29 Aug, 2019
 
 ** New

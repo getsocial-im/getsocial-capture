@@ -119,7 +119,9 @@ namespace GetSocialSdk.Capture.Scripts
             _recorder.CurrentState = Recorder.RecordingState.OnHold;
             if (StoreWorker.Instance.StoredFrames.Count() > 0)
             {
-                var generator = new GeneratorWorker(loopPlayback, playbackFrameRate, ThreadPriority.BelowNormal, StoreWorker.Instance.StoredFrames,
+                var frames = StoreWorker.Instance.StoredFrames;
+                StoreWorker.Instance.Clear();
+                var generator = new GeneratorWorker(loopPlayback, playbackFrameRate, ThreadPriority.BelowNormal, frames,
                      _resultFilePath,
                     () =>
                     {

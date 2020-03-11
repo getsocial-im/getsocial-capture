@@ -63,6 +63,15 @@ namespace GetSocialSdk.Scripts.Internal.Util
             return _queue.Count;
         }
 
+        /// <summary>
+        /// Removes all element from the queue.
+        /// </summary>
+        public void Clear()
+        {
+            _queue.Clear();
+            _queue.TrimExcess();
+        }
+
         #endregion
 
     }

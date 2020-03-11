@@ -41,6 +41,11 @@ namespace GetSocialSdk.Capture.Scripts.Internal.Recorder
 
         #region Internal methods
 
+        internal void Clear()
+        {
+            StoredFrames.Clear();
+        }
+
         internal void Start(ThreadPriority priority, int maxCapturedFrames)
         {
             StoredFrames = new FixedSizedQueue<GifFrame>(maxCapturedFrames);
