@@ -119,9 +119,7 @@ namespace GetSocialSdk.Capture.Scripts
             _recorder.CurrentState = Recorder.RecordingState.OnHold;
             if (StoreWorker.Instance.StoredFrames.Count() > 0)
             {
-                var frames = StoreWorker.Instance.StoredFrames;
-                StoreWorker.Instance.Clear();
-                var generator = new GeneratorWorker(loopPlayback, playbackFrameRate, ThreadPriority.BelowNormal, frames,
+                var generator = new GeneratorWorker(loopPlayback, playbackFrameRate, ThreadPriority.BelowNormal, StoreWorker.Instance.StoredFrames,
                      _resultFilePath,
                     () =>
                     {
@@ -130,7 +128,9 @@ namespace GetSocialSdk.Capture.Scripts
                         MainThreadExecutor.Queue(() => {
                             result(File.ReadAllBytes(_resultFilePath));
                             
-                        });                        
+                        });
+
+                        StoreWorker.Instance.Clear();
                     });
                 generator.Start();
             }

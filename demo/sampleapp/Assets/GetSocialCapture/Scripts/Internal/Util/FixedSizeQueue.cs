@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -40,7 +41,7 @@ namespace GetSocialSdk.Scripts.Internal.Util
             while (_queue.Count > _size)
             {
                 var o = _queue.Dequeue();
-                if (o is Object) Object.Destroy(o as Object);
+                if (o is UnityEngine.Object) UnityEngine.Object.Destroy(o as UnityEngine.Object);
             }
         }
 
@@ -68,8 +69,9 @@ namespace GetSocialSdk.Scripts.Internal.Util
         /// </summary>
         public void Clear()
         {
+            var queueId = GC.GetGeneration(_queue);
             _queue.Clear();
-            _queue.TrimExcess();
+            GC.Collect(queueId, GCCollectionMode.Forced);
         }
 
         #endregion

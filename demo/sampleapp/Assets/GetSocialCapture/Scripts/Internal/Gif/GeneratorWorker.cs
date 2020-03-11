@@ -38,9 +38,11 @@ namespace GetSocialSdk.Capture.Scripts.Internal.Gif
 		private readonly Thread _thread;
 
 		private FixedSizedQueue<GifFrame> _capturedFrames;
-		private readonly GifEncoder _encoder;
+		private GifEncoder _encoder;
 		private readonly string _filePath;
 		private readonly Action _onFileSaved;
+        private readonly int _playbackFrameRate;
+        private readonly int _repeat;
 
 		#endregion
 
@@ -51,17 +53,18 @@ namespace GetSocialSdk.Capture.Scripts.Internal.Gif
 			_capturedFrames = capturedFrames;
 			_filePath = filePath;
 			_onFileSaved = onFileSaved;
-			// 0: loop, -1 play once
-			var repeat = loop ? 0 : -1;
-			_encoder = new GifEncoder(repeat, 20);
-			_encoder.SetFrameRate(playbackFrameRate);
+            // 0: loop, -1 play once
+            _repeat = loop ? 0 : -1;
+            _playbackFrameRate = playbackFrameRate;
 
 			_thread = new Thread(Run) {Priority = priority};
 		}
 
 		internal void Start()
 		{
-			_thread.Start();
+            _encoder = new GifEncoder(_repeat, 20);
+            _encoder.SetFrameRate(_playbackFrameRate);
+            _thread.Start();
 		}
 
 		#endregion
@@ -70,23 +73,22 @@ namespace GetSocialSdk.Capture.Scripts.Internal.Gif
 
 		private void Run()
 		{
-			var startTimestamp = DateTime.Now;
-			_encoder.Start(_filePath);
+            var startTimestamp = DateTime.Now;
+            _encoder.Start(_filePath);
 
-			// pass all frames to encoder to build a palette out of a subset of them
-			_encoder.BuildPalette(ref _capturedFrames);
+            // pass all frames to encoder to build a palette out of a subset of them
+            _encoder.BuildPalette(ref _capturedFrames);
 
-			for (int i = 0; i < _capturedFrames.Count(); i++)
-			{
-				_encoder.AddFrame(_capturedFrames.ElementAt(i));
+            for (int i = 0; i < _capturedFrames.Count(); i++)
+            {
+                _encoder.AddFrame(_capturedFrames.ElementAt(i));
 
-			}
-			_encoder.Finish();
-			Debug.Log("Gif generation finished, took " + (DateTime.Now - startTimestamp).Milliseconds + " msec");
+            }
+            _encoder.Finish();
+            Debug.Log("Gif generation finished, took " + (DateTime.Now - startTimestamp).Milliseconds + " msec");
 
-			if (_onFileSaved != null)
-				_onFileSaved();
-		}
+            _onFileSaved?.Invoke();
+        }
 
 		#endregion
 		

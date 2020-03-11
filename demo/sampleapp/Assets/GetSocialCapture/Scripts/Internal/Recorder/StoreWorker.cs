@@ -43,11 +43,22 @@ namespace GetSocialSdk.Capture.Scripts.Internal.Recorder
 
         internal void Clear()
         {
-            StoredFrames.Clear();
+            if (StoredFrames != null)
+            {
+                StoredFrames.Clear();
+                StoredFrames = null;
+            }
+            if (_thread != null)
+            {
+                _thread.Abort();
+                _thread = null;
+            }
         }
 
         internal void Start(ThreadPriority priority, int maxCapturedFrames)
         {
+            // make sure everything is cleared from previous session
+            Clear();
             StoredFrames = new FixedSizedQueue<GifFrame>(maxCapturedFrames);
             _thread = new Thread(Run) {Priority = priority};
             _thread.Start();
