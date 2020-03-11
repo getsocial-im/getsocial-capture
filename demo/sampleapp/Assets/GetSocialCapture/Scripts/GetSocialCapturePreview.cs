@@ -87,7 +87,15 @@ namespace GetSocialSdk.Capture.Scripts
             _framesToPlay = new List<Texture2D>();
             _play = false;
         }
-        
+
+        private void OnDestroy()
+        {
+            var listId = GC.GetGeneration(_framesToPlay);
+            _framesToPlay.Clear();
+            GC.Collect(listId, GCCollectionMode.Forced);
+            _framesToPlay = null;
+        }
+
         private void Start()
         {
             Init();

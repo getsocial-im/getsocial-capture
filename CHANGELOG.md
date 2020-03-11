@@ -1,3 +1,9 @@
+## v0.9.5 - 11 Mar, 2020
+
+** Fixed
+
+- Issue with previous release which blocked previewing of recorded content.
+
 ## v0.9.4 - 11 Mar, 2020
 
 ** Fixed

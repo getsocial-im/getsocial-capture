@@ -129,8 +129,6 @@ namespace GetSocialSdk.Capture.Scripts
                             result(File.ReadAllBytes(_resultFilePath));
                             
                         });
-
-                        StoreWorker.Instance.Clear();
                     });
                 generator.Start();
             }
