@@ -1,3 +1,9 @@
+## v0.9.4 - 11 Mar, 2020
+
+** Fixed
+
+- Issue with previous release which blocked generating gif.
+
 ## v0.9.3 - 11 Mar, 2020
 
 ** Improvements
