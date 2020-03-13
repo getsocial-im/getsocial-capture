@@ -1,3 +1,9 @@
+## v0.9.6 - 13 Mar, 2020
+
+** Fixed
+
+- Issue with not properly destroyed objects.
+
 ## v0.9.5 - 11 Mar, 2020
 
 ** Fixed

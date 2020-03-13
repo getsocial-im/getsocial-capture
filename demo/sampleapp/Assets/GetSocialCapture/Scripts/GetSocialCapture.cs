@@ -164,8 +164,13 @@ namespace GetSocialSdk.Capture.Scripts
             _recorder.CaptureFrameRate = captureFrameRate;
         }
 
+        private void OnDestroy()
+        {
+            StoreWorker.Instance.Clear();
+        }
+
         #endregion
-        
+
         #region Private methods
 
         private static string GetResultDirectory()
